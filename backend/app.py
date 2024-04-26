@@ -39,16 +39,3 @@ async def create_order(order: OrderSchema, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_order)
     return db_order
-
-@app.get("/dashboard/", response_model=List[OrderSchema])
-async def get_orders(user_id: int, db: Session = Depends(get_db)):
-    orders = db.query(Order).filter(Order.user_id == user_id).all()
-    return orders
-
-@app.post("/create_order", response_model=OrderSchema)
-async def create_order(order: OrderSchema, db: Session = Depends(get_db)):
-    db_order = Order(**order.model_dump())
-    db.add(db_order)
-    db.commit()
-    db.refresh(db_order)
-    return db_order
