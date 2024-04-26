@@ -8,3 +8,5 @@ include/
 backend/.DS_Store
 .pyvenv.cfg
 pyvenv.cfg
+__pycache__/*
+backend/__pycache__/*
