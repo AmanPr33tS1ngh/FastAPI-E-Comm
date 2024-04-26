@@ -1,12 +1,11 @@
 from pydantic import BaseModel
-from datetime import datetime 
 
 class UserSchema(BaseModel):
     name: str
     username: str
     email: str
     hashed_password: str
-    
+
 class ProductSchema(BaseModel):
     price: int
     name: str
@@ -14,13 +13,12 @@ class ProductSchema(BaseModel):
     image: str
     category: str
     description: str
-    
-    
+
 class OrderSchema(BaseModel):
     quantity: int
-    user_id: str
-    product_id: str
+    user_id: int  # Use int instead of str for user_id and product_id
+    product_id: int
     order_amount: int
     transaction_id: str
     is_delivered: bool
-    created_at: datetime
+    created_at: str  # Serialize datetime as string
