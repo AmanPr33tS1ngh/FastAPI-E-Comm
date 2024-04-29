@@ -5,3 +5,6 @@ def create_database():
     # Creating all tables defined in Base metadata
     Base.metadata.create_all(bind=engine)
     print("Database tables created successfully!")
+
+# if __name__ == '__main__':
+#     create_database()
