@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import FastAPI, Depends, HTTPException, Header
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db, SessionLocal
 from models import User, Product, Order
@@ -14,7 +14,7 @@ async def get_products(db: Session = Depends(get_db)):
     return products
 
 @app.post("/create_product/", response_model=ProductSchema)
-async def create_product(product: ProductSchema, db: Session = Depends(get_db)):
+async def create_product(product: ProductSchema, user: dict = Depends(get_token_auth), db: Session = Depends(get_db)):
     db_product = Product(**product.model_dump())
     db.add(db_product)
     db.commit()
@@ -22,12 +22,12 @@ async def create_product(product: ProductSchema, db: Session = Depends(get_db)):
     return db_product
 
 @app.get("/orders/", response_model=List[OrderSchema])
-async def get_orders(user_id: int, db: Session = Depends(get_db)):
+async def get_orders(user_id: int, user: dict = Depends(get_token_auth), db: Session = Depends(get_db)):
     orders = db.query(Order).filter(Order.user_id == user_id).all()
     return orders
 
 @app.get("/order/", response_model=OrderSchema)
-async def get_order(user_id: int, order_id: int, db: Session = Depends(get_db)):
+async def get_order(user_id: int, order_id: int, user: dict = Depends(get_token_auth), db: Session = Depends(get_db)):
     order = db.query(Order).filter(Order.user_id == user_id, Order.id == order_id).first()
     if order is None:
         raise HTTPException(status_code=404, detail="Order not found")
