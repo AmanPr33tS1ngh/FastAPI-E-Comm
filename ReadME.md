@@ -13,7 +13,6 @@ This repository contains a FastAPI project with various endpoints for user authe
   ```{
     "username": "string",
     "hashed_password": "string"
-  
 - **Responses**:
   - `200`: Successful authentication, returns a JWT token.
   - `422`: Validation error with details.
@@ -26,7 +25,6 @@ This repository contains a FastAPI project with various endpoints for user authe
 - **Request Body**:
   ```{
     "token": "string"
-  
 - **Responses**:
   - `200`: Successful sign-in, returns a JWT token.
   - `422`: Validation error with details.
@@ -42,7 +40,6 @@ This repository contains a FastAPI project with various endpoints for user authe
     "username": "string",
     "email": "string",
     "hashed_password": "string"
-  
 - **Responses**:
   - `200`: Successful registration, returns a success message.
   - `422`: Validation error with details.
@@ -71,7 +68,6 @@ This repository contains a FastAPI project with various endpoints for user authe
     "username": "string",
     "email": "string",
     "hashed_password": "string"
-  
 - **Responses**:
   - `200`: Successful update, returns updated user profile details.
   - `422`: Validation error with details.
@@ -103,7 +99,6 @@ This repository contains a FastAPI project with various endpoints for user authe
     "transaction_id": "string",
     "is_delivered": true,
     "created_at": "string"
-  
 - **Responses**:
   - `200`: Successful order creation, returns the created order object.
   - `422`: Validation error with details.
