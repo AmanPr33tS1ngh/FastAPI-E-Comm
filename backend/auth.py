@@ -1,6 +1,6 @@
 import jwt
 from fastapi import Header, HTTPException
-from schema import AuthSchema
+from user.schema import AuthSchema
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import os
