@@ -12,7 +12,7 @@ user_router = APIRouter()
 async def auth_token(req_user: AuthSchema, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.username == req_user.username,
                                  User.hashed_password == req_user.hashed_password).first()
-    if not user:
+    if user is None:
         raise HTTPException(status_code=404, message="Wrong username or password")
 
     token = get_token(req_user.model_dump())
@@ -22,13 +22,13 @@ async def auth_token(req_user: AuthSchema, db: Session = Depends(get_db)):
 @user_router.post("/signin/") # sign in
 async def sign_in(req_token: TokenSchema, db: Session = Depends(get_db)):
     decoded_user = decode_token(req_token.token)
-    if not decoded_user:
+    if decoded_user is None:
         raise HTTPException(status_code=404, message="Auth failed")
 
     _user = decoded_user.get('user')
     user = db.query(User).filter(User.username == _user.get('username'),
                                  User.hashed_password == _user.get('hashed_password')).first()
-    if not user:
+    if user is None:
         raise HTTPException(status_code=404, message="Wrong username or password")
     return user
 
@@ -50,7 +50,7 @@ async def get_order(user: dict = Depends(get_token_auth), db: Session = Depends(
         raise HTTPException(status_code=404, detail="User not found")
 
     user_found = db.query(User).filter(User.username == user.get('username')).first()
-    if not user_found:
+    if user_found is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user_found
 
@@ -60,7 +60,7 @@ async def get_order(updated_profile: UserSchema, user: dict = Depends(get_token_
         raise HTTPException(status_code=404, detail="User not found")
 
     existing_user = db.query(User).filter(User.username == user.get('username')).first()
-    if not existing_user:
+    if existing_user is None:
         raise HTTPException(status_code=404, detail="User not found")
 
     existing_user.name = updated_profile.name

@@ -26,10 +26,10 @@ def decode_token(token: str) -> dict:
     return decoded_token if datetime.fromisoformat(expiration) >= datetime.now() else None
 
 async def get_token_auth(token: str = Header(...)):
-    if not token:
+    if token is None:
         raise HTTPException(status_code=401, detail="Authentication required")
 
     decoded_token = decode_token(token)
-    if not decoded_token:
+    if decoded_token is None:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
-    return token
+    return decoded_token
