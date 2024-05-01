@@ -1,133 +1,138 @@
-# Documentation
+# FastAPI API Documentation
 
-This repository contains a FastAPI project with several endpoints for managing products, orders, and user authentication.
+This repository contains a FastAPI project with various endpoints for user authentication, user profile management, product management, and order management.
 
 ## Endpoints
 
-### 1. Get Products
+### 1. Authenticate and Get Token
 
-- **Method**: `GET`
-- **URL**: `/`
-- **Description**: Retrieve a list of products.
-- **Query Parameters**:
-  - None
-- **Request Headers**:
-  - Authorization: Bearer {token}
-- **Response**:
-  - Status Code: 200 OK
-  - Body: List of `ProductSchema` objects
-
-### 2. Create Product
-
+- **Endpoint**: `/users/api/token/`
 - **Method**: `POST`
-- **URL**: `/create_product/`
-- **Description**: Create a new product.
+- **Description**: Authenticate a user and obtain an access token.
 - **Request Body**:
-  - `ProductSchema`
-- **Request Headers**:
-  - Authorization: Bearer {token}
-- **Response**:
-  - Status Code: 200 OK
-  - Body: `ProductSchema` object
+  ```{
+    "username": "string",
+    "hashed_password": "string"
+  
+- **Responses**:
+  - `200`: Successful authentication, returns a JWT token.
+  - `422`: Validation error with details.
 
-### 3. Get Orders
+### 2. Sign In
 
-- **Method**: `GET`
-- **URL**: `/orders/`
-- **Description**: Retrieve a list of orders for a specific user.
-- **Query Parameters**:
-  - `user_id` (integer)
-- **Request Headers**:
-  - Authorization: Bearer {token}
-- **Response**:
-  - Status Code: 200 OK
-  - Body: List of `OrderSchema` objects
-
-### 4. Get Order
-
-- **Method**: `GET`
-- **URL**: `/order/`
-- **Description**: Retrieve details of a specific order for a user.
-- **Query Parameters**:
-  - `user_id` (integer)
-  - `order_id` (integer)
-- **Request Headers**:
-  - Authorization: Bearer {token}
-- **Response**:
-  - Status Code: 200 OK
-  - Body: `OrderSchema` object
-
-### 5. Create Order
-
+- **Endpoint**: `/users/signin/`
 - **Method**: `POST`
-- **URL**: `/create_order/`
-- **Description**: Create a new order.
-- **Request Body**:
-  - `OrderSchema`
-- **Request Headers**:
-  - Authorization: Bearer {token}
-- **Response**:
-  - Status Code: 200 OK
-  - Body: `OrderSchema` object
-
-### 6. Authenticate and Get Token
-
-- **Method**: `POST`
-- **URL**: `/api/token/`
-- **Description**: Authenticate a user and generate an access token.
-- **Request Body**:
-  - `AuthSchema`
-- **Response**:
-  - Status Code: 200 OK
-  - Body: JSON with access token (`"access_token"`)
-
-### 7. Sign In
-
-- **Method**: `POST`
-- **URL**: `/signin/`
 - **Description**: Sign in a user and return a token.
 - **Request Body**:
-  - `TokenSchema`
-- **Response**:
-  - Status Code: 200 OK
-  - Body: JSON with access token (`"access_token"`)
+  ```{
+    "token": "string"
+  
+- **Responses**:
+  - `200`: Successful sign-in, returns a JWT token.
+  - `422`: Validation error with details.
 
-### 8. Sign Up
+### 3. Sign Up
 
+- **Endpoint**: `/users/signup/`
 - **Method**: `POST`
-- **URL**: `/signup/`
 - **Description**: Register a new user.
 - **Request Body**:
-  - `UserSchema`
-- **Response**:
-  - Status Code: 200 OK
+  ```
+    "name": "string",
+    "username": "string",
+    "email": "string",
+    "hashed_password": "string"
+  
+- **Responses**:
+  - `200`: Successful registration, returns a success message.
+  - `422`: Validation error with details.
 
-## Usage
+### 4. Get User Profile
 
-1. **Running the FastAPI Application**:
+- **Endpoint**: `/users/profile/`
+- **Method**: `GET`
+- **Description**: Retrieve user profile details.
+- **Request Headers**:
+  - `token`: User's JWT token.
+- **Responses**:
+  - `200`: Successful response, returns user profile details.
+  - `422`: Validation error with details.
 
+### 5. Update User Profile
+
+- **Endpoint**: `/users/update_profile/`
+- **Method**: `PUT`
+- **Description**: Update user profile information.
+- **Request Headers**:
+  - `token`: User's JWT token.
+- **Request Body**:
+  ```
+    "name": "string",
+    "username": "string",
+    "email": "string",
+    "hashed_password": "string"
+  
+- **Responses**:
+  - `200`: Successful update, returns updated user profile details.
+  - `422`: Validation error with details.
+
+### 6. Get Orders
+
+- **Endpoint**: `/orders/`
+- **Method**: `GET`
+- **Description**: Retrieve a list of orders.
+- **Request Headers**:
+  - `token`: User's JWT token.
+- **Responses**:
+  - `200`: Successful response, returns a list of order objects.
+  - `422`: Validation error with details.
+
+### 7. Create Order
+
+- **Endpoint**: `/orders/`
+- **Method**: `POST`
+- **Description**: Create a new order.
+- **Request Headers**:
+  - `token`: User's JWT token.
+- **Request Body**:
+  ```
+    "quantity": 0,
+    "user_id": 0,
+    "product_id": 0,
+    "order_amount": 0,
+    "transaction_id": "string",
+    "is_delivered": true,
+    "created_at": "string"
+  
+- **Responses**:
+  - `200`: Successful order creation, returns the created order object.
+  - `422`: Validation error with details.
+
+### 8. Get Order Details
+
+- **Endpoint**: `/orders/{order_id}/`
+- **Method**: `GET`
+- **Description**: Retrieve details of a specific order.
+- **Path Parameters**:
+  - `order_id`: ID of the order.
+- **Request Headers**:
+  - `token`: User's JWT token.
+- **Responses**:
+  - `200`: Successful response, returns details of the specified order.
+  - `422`: Validation error with details.
+
+**Running the FastAPI Application**:
    - Make sure you have Python and FastAPI installed.
    - Install dependencies:
-     ```bash
      pip install -r requirements.txt
-     ```
    - Start the FastAPI application:
-     ```bash
      uvicorn main:app --reload
-     ```
 
-2. **Accessing the Endpoints**:
-   - Use a tool like `curl` or `Postman` to send requests to the defined endpoints.
-   - Ensure to include the required headers and request bodies as described in each endpoint's documentation.
+## Dependencies
 
-## Example
+- Python 3.7+
+- FastAPI
+- SQLAlchemy (for database operations)
+- uvicorn (for running the FastAPI application)
 
-```python
-import requests
 
-# Example: Get list of products
-url = "http://localhost:8000/"
-headers = {"Authorization": "Bearer <your_token_here>"}
-response = requests.get(url, headers=headers)
-print(response.json())
-```

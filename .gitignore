@@ -10,5 +10,7 @@ backend/.DS_Store
 pyvenv.cfg
 __pycache__/*
 backend/__pycache__/*
+*/__pycache__/*
+**/__pycache__/*
 .env
 .idea
